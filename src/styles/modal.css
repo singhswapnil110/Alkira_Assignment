@@ -49,6 +49,7 @@
     cursor: pointer;
     transform: scale(2);
     font-weight: bold;
+    color: white;
   }
 
   @media (max-width: 450px) {

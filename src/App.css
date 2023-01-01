@@ -61,6 +61,7 @@ input {
 .table {
   width: 90%;
   height: 100%;
+  max-width: 900px;
 }
 
 #down > img {
@@ -69,6 +70,13 @@ input {
 
 #up > img {
   transform: rotate(0deg);
+}
+
+.table-body {
+  display: grid;
+  height: 90%;
+  width: 100%;
+  gap: 5px;
 }
 
 .table-item {
@@ -81,18 +89,18 @@ input {
   font-weight: bold;
 }
 
-.table-header {
+.table-header-item {
   background: #074684;
   height: 80px;
   color: white;
 }
 
-.table-body {
+.table-body-item {
   background: #F8F8FD;
   cursor: pointer;
 }
 
-.table-body:hover {
+.table-body-item:hover {
   background: cyan;
 }
 
