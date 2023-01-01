@@ -1,14 +1,14 @@
 import React, { useContext, useState } from "react";
 import UpArrow from "../assets/up_arrow.png";
 import NoResults from "../assets/noRes.png";
-import { Actions, Constants } from "../constants/constants";
+import { actions, constants } from "../constants/constants";
 import { ReducerContext } from "../store/reducerContext";
 import { useFetch } from "../hooks/useFetch";
 import { useModal } from "../hooks/useModal";
 import { Team } from "./Team";
 
 export const Table = ({ filteredResults, page }) => {
-  const { paginationValue } = Constants;
+  const { paginationValue } = constants;
   const [state, dispatch] = useContext(ReducerContext);
   const [teamID, setTeamID] = useState(null);
   const { sortOrder } = state;
@@ -18,9 +18,9 @@ export const Table = ({ filteredResults, page }) => {
   );
 
   useFetch(
-    teamID ? Constants.games_API_ENDPOINT + teamID : null,
+    teamID ? constants.games_API_ENDPOINT + teamID : null,
     {},
-    Actions.setGamesData,
+    actions.setGamesData,
     dispatch
   );
 
@@ -40,11 +40,15 @@ export const Table = ({ filteredResults, page }) => {
             alignItems: "center",
             justifyContent: "center",
           }}
-          onClick={() => dispatch({ type: Actions.sortTeamsData })}
+          onClick={() => dispatch({ type: actions.sortTeamsData })}
           id={!sortOrder ? "up" : "down"}
         >
           City
-          <img src={UpArrow} style={{ width: "20px", margin: "0px 5px" }} />
+          <img
+            alt="City Sort Order Arrow"
+            src={UpArrow}
+            style={{ width: "20px", margin: "0px 5px" }}
+          />
         </div>
         <div>Abbreviation</div>
         <div>Conference</div>
@@ -79,7 +83,11 @@ export const Table = ({ filteredResults, page }) => {
               </div>
             ))
         ) : (
-          <img src={NoResults} style={{ width: "100%", height: "100%" }} />
+          <img
+            alt="No Results Available Image"
+            src={NoResults}
+            style={{ width: "100%", height: "100%" }}
+          />
         )}
       </div>
       {TeamModal?.modalComponent}

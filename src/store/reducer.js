@@ -1,7 +1,7 @@
 const sortData = (tableData, sortOrder) =>
-  tableData.sort((a, b) => {
-    return sortOrder ? (a.city > b.city ? 1 : -1) : a.city < b.city ? 1 : -1;
-  }, console.log("first"));
+  tableData.sort((a, b) =>
+    sortOrder ? (a.city > b.city ? 1 : -1) : a.city < b.city ? 1 : -1
+  );
 
 export const reducer = (state, action) => {
   switch (action.type) {

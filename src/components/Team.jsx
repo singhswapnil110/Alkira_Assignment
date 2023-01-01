@@ -3,7 +3,6 @@ export const Team = ({ gamesData, teamID }) => {
     (game) => game.home_team.id === teamID
   )[0];
   const totalGamesPlayed = gamesData.meta?.total_count;
-  console.log(gamesData);
 
   return (
     <div className="team-page">
@@ -14,11 +13,12 @@ export const Team = ({ gamesData, teamID }) => {
         Team Full Name : <span>{gameData?.home_team.full_name}</span>
       </div>
       <div className="team-page-item">
-        Total Games in 2022 : <span>{totalGamesPlayed}</span>
+        Total Games in 2022 : <span>{gameData ? totalGamesPlayed : ""}</span>
       </div>
       <p className="team-page-item">Random Game Details:</p>
       <p className="team-page-item">
-        Date <span>{new Date(gameData?.date).toDateString()}</span>
+        Date{" "}
+        <span>{gameData ? new Date(gameData.date).toDateString() : ""}</span>
       </p>
       <p className="team-page-item">
         Home Team<span>{gameData?.home_team.name}</span>
@@ -31,7 +31,7 @@ export const Team = ({ gamesData, teamID }) => {
       </p>
       <p className="team-page-item">
         Visitor Team Score
-        <span>{gameData ? gameData.visitor_team_score : "Loading...."}</span>
+        <span>{gameData?.visitor_team_score}</span>
       </p>
     </div>
   );

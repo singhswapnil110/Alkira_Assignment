@@ -7,7 +7,6 @@ export const useFetch = (url, options, type, dispatch) => {
 
   useEffect(() => {
     fetchData(url, addedOptions);
-    console.log("Hi");
     return () => controller.abort();
   }, [url]);
 

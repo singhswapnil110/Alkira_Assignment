@@ -1,4 +1,4 @@
-export const Constants = {
+export const constants = {
   paginationValue: 8,
   teams_API_ENDPOINT: "https://www.balldontlie.io/api/v1/teams",
   games_API_ENDPOINT:
@@ -8,10 +8,10 @@ export const Constants = {
 export const initialState = {
   teamsData: [],
   gamesData: [],
-  sortOrder: false,
+  sortOrder: true,
 };
 
-export const Actions = {
+export const actions = {
   setTeamsData: "SET_TEAMS_DATA",
   setGamesData: "SET_GAMES_DATA",
   sortTeamsData: "SORT_TEAMS_DATA",

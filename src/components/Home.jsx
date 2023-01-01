@@ -2,17 +2,17 @@ import { React, useContext, useState } from "react";
 import SearchIcon from "../assets/search_icon.png";
 import { useFetch } from "../hooks/useFetch";
 import { Table } from "./Table";
-import { Actions, Constants } from "../constants/constants";
+import { actions, constants } from "../constants/constants";
 import { ReducerContext } from "../store/reducerContext";
 
 export const Home = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const { paginationValue } = Constants;
+  const { paginationValue } = constants;
   const [state, dispatch] = useContext(ReducerContext);
 
   const { teamsData: tableData } = state;
-  useFetch(Constants.teams_API_ENDPOINT, {}, Actions.setTeamsData, dispatch);
+  useFetch(constants.teams_API_ENDPOINT, {}, actions.setTeamsData, dispatch);
 
   const filteredResults = tableData?.filter(
     (item) =>
@@ -28,6 +28,7 @@ export const Home = () => {
         <h2 style={{ color: "#074684" }}>NBA TEAMS</h2>
         <div className="input-box">
           <img
+            alt="Search Icon"
             src={SearchIcon}
             style={{
               position: "absolute",
@@ -36,7 +37,11 @@ export const Home = () => {
               transform: "scale(0.8)",
             }}
           />
+          <label id="searchInput" hidden>
+            Search Bar
+          </label>
           <input
+            aria-labelledby="searchInput"
             type="text"
             onChange={(e) => (
               setSearchTerm(e.target.value.toLowerCase()), setPage(1)
