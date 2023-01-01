@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export const useModal = (component, callBack) => {
+export const useModal = (component, callBack = () => {}) => {
   const [modalState, setModalState] = useState(false);
   const closeModal = () => {
     setModalState(false);

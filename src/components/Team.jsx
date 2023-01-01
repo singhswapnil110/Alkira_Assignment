@@ -1,14 +1,9 @@
-import { React, useEffect, useState } from "react";
-import { useFetch } from "../hooks/useFetch";
-
-export const Team = ({ teamID }) => {
-  const { data, meta: metaData } = teamID
-    ? useFetch(
-        `https://www.balldontlie.io/api/v1/games?seasons[]=2022&team_ids[]=${teamID}`
-      )
-    : {};
-
-  const gameData = data?.filter((game) => game.home_team.id === teamID)[0];
+export const Team = ({ gamesData, teamID }) => {
+  const gameData = gamesData.data?.filter(
+    (game) => game.home_team.id === teamID
+  )[0];
+  const totalGamesPlayed = gamesData.meta?.total_count;
+  console.log(gamesData);
 
   return (
     <div className="team-page">
@@ -19,7 +14,7 @@ export const Team = ({ teamID }) => {
         Team Full Name : <span>{gameData?.home_team.full_name}</span>
       </div>
       <div className="team-page-item">
-        Total Games in 2022 : <span>{metaData?.total_count}</span>
+        Total Games in 2022 : <span>{totalGamesPlayed}</span>
       </div>
       <p className="team-page-item">Random Game Details:</p>
       <p className="team-page-item">

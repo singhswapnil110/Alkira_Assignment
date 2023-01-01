@@ -1,17 +1,34 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import UpArrow from "../assets/up_arrow.png";
 import NoResults from "../assets/noRes.png";
-import { Constants } from "../constants/constants";
+import { Actions, Constants } from "../constants/constants";
+import { ReducerContext } from "../store/reducerContext";
+import { useFetch } from "../hooks/useFetch";
+import { useModal } from "../hooks/useModal";
+import { Team } from "./Team";
 
-export const Table = ({
-  sortOrder,
-  setSortOrder,
-  filteredResults,
-  page,
-  setTeamID,
-  TeamModal,
-}) => {
+export const Table = ({ filteredResults, page }) => {
   const { paginationValue } = Constants;
+  const [state, dispatch] = useContext(ReducerContext);
+  const [teamID, setTeamID] = useState(null);
+  const { sortOrder } = state;
+  let TeamModal = useModal(
+    <Team gamesData={state.gamesData} teamID={teamID} />,
+    () => setTeamID(null)
+  );
+
+  useFetch(
+    teamID ? Constants.games_API_ENDPOINT + teamID : null,
+    {},
+    Actions.setGamesData,
+    dispatch
+  );
+
+  const openTeamModal = (teamId) => {
+    setTeamID(teamId);
+    TeamModal.setModalState(true);
+  };
+
   return (
     <div className="table">
       <h3 className="table-header-item table-item">
@@ -23,10 +40,10 @@ export const Table = ({
             alignItems: "center",
             justifyContent: "center",
           }}
-          onClick={() => setSortOrder(!sortOrder)}
+          onClick={() => dispatch({ type: Actions.sortTeamsData })}
           id={!sortOrder ? "up" : "down"}
         >
-          City{" "}
+          City
           <img src={UpArrow} style={{ width: "20px", margin: "0px 5px" }} />
         </div>
         <div>Abbreviation</div>
@@ -51,10 +68,7 @@ export const Table = ({
             .map((team) => (
               <div
                 className="table-body-item table-item"
-                onClick={() => {
-                  setTeamID(team.id);
-                  TeamModal.setModalState(true);
-                }}
+                onClick={() => openTeamModal(team.id)}
                 key={team.id}
               >
                 <div>{team.full_name}</div>
@@ -68,6 +82,7 @@ export const Table = ({
           <img src={NoResults} style={{ width: "100%", height: "100%" }} />
         )}
       </div>
+      {TeamModal?.modalComponent}
     </div>
   );
 };

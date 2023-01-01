@@ -1,32 +1,18 @@
-import { React, useEffect, useMemo, useState } from "react";
-import { useModal } from "../hooks/useModal";
-import { Team } from "./Team";
+import { React, useContext, useState } from "react";
 import SearchIcon from "../assets/search_icon.png";
 import { useFetch } from "../hooks/useFetch";
 import { Table } from "./Table";
+import { Actions, Constants } from "../constants/constants";
+import { ReducerContext } from "../store/reducerContext";
 
 export const Home = () => {
   const [page, setPage] = useState(1);
-  const [teamID, setTeamID] = useState(null);
-  const [sortOrder, setSortOrder] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const paginationValue = 8;
+  const { paginationValue } = Constants;
+  const [state, dispatch] = useContext(ReducerContext);
 
-  const { data: tableData, setData: setTableData } = useFetch(
-    "https://www.balldontlie.io/api/v1/teams"
-  );
-
-  useEffect(() => sortData(), [sortOrder]);
-
-  const sortData = () => {
-    if (tableData?.length)
-      // setTableData(
-      //   [...tableData].sort((a, b) =>
-      //     sortOrder ? (a.city > b.city ? 1 : -1) : a.city < b.city ? 1 : -1
-      //   )
-      // );
-      console.log(sortOrder);
-  };
+  const { teamsData: tableData } = state;
+  useFetch(Constants.teams_API_ENDPOINT, {}, Actions.setTeamsData, dispatch);
 
   const filteredResults = tableData?.filter(
     (item) =>
@@ -35,8 +21,6 @@ export const Home = () => {
       item.full_name.toLowerCase().includes(searchTerm) ||
       item.name.toLowerCase().includes(searchTerm)
   );
-
-  const TeamModal = useModal(<Team teamID={teamID} />, () => setTeamID(null));
 
   return (
     <div className="Home">
@@ -61,14 +45,7 @@ export const Home = () => {
         </div>
       </header>
       <div className="table-container">
-        <Table
-          sortOrder={sortOrder}
-          setSortOrder={setSortOrder}
-          filteredResults={filteredResults}
-          page={page}
-          setTeamID={setTeamID}
-          TeamModal={TeamModal}
-        />
+        <Table filteredResults={filteredResults} page={page} />
       </div>
       <div className="button-group">
         <button
@@ -88,7 +65,6 @@ export const Home = () => {
           +
         </button>
       </div>
-      {TeamModal.modalComponent}
     </div>
   );
 };

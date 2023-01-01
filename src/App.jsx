@@ -1,11 +1,14 @@
 import "./App.css";
 import { Home } from "./components/Home";
+import { ReducerContextWrapper } from "./store/reducerContext";
 
 function App() {
   return (
-    <div className="App">
-      <Home />
-    </div>
+    <ReducerContextWrapper>
+      <div className="App">
+        <Home />
+      </div>
+    </ReducerContextWrapper>
   );
 }
 
