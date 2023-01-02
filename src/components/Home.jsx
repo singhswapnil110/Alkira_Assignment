@@ -4,6 +4,7 @@ import { useFetch } from "../hooks/useFetch";
 import { Table } from "./Table";
 import { actions, constants } from "../constants/constants";
 import { ReducerContext } from "../store/reducerContext";
+import Github from "../assets/github.png";
 
 export const Home = () => {
   const [page, setPage] = useState(1);
@@ -53,22 +54,33 @@ export const Home = () => {
         <Table filteredResults={filteredResults} page={page} />
       </div>
       <div className="button-group">
-        <button
-          disabled={page == 1 || !filteredResults.length}
-          onClick={() => setPage(page - 1)}
+        <div className="page-button-group">
+          <button
+            disabled={page == 1 || !filteredResults.length}
+            onClick={() => setPage(page - 1)}
+          >
+            -
+          </button>
+          <span style={{ fontSize: "large" }}>{page}</span>
+          <button
+            disabled={
+              page == Math.ceil(filteredResults?.length / paginationValue) ||
+              !filteredResults?.length
+            }
+            onClick={() => setPage(page + 1)}
+          >
+            +
+          </button>
+        </div>
+        <a
+          href="https://github.com/singhswapnil110/Alkira_Assignment"
+          target="_blank"
+          rel="noopener noreferrer"
         >
-          -
-        </button>
-        <span style={{ fontSize: "large" }}>{page}</span>
-        <button
-          disabled={
-            page == Math.ceil(filteredResults?.length / paginationValue) ||
-            !filteredResults?.length
-          }
-          onClick={() => setPage(page + 1)}
-        >
-          +
-        </button>
+          <button className="code-button">
+            Code <img src={Github} />
+          </button>
+        </a>
       </div>
     </div>
   );

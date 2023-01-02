@@ -11,11 +11,21 @@ export const Table = ({ filteredResults, page }) => {
   const { paginationValue } = constants;
   const [state, dispatch] = useContext(ReducerContext);
   const [teamID, setTeamID] = useState(null);
+  const { teamsData } = state;
   const { sortOrder } = state;
   let TeamModal = useModal(
     <Team gamesData={state.gamesData} teamID={teamID} />,
     () => setTeamID(null)
   );
+  const isLoading = !teamsData.length;
+  let skeletonLoadingClassname = isLoading ? "skeleton" : "";
+  const skeletonComponent = Array(paginationValue)
+    .fill(0)
+    .map(() => (
+      <div
+        className={`table-body-item table-item ${skeletonLoadingClassname}`}
+      />
+    ));
 
   useFetch(
     teamID ? constants.games_API_ENDPOINT + teamID : null,
@@ -57,31 +67,36 @@ export const Table = ({ filteredResults, page }) => {
       <div
         className="table-body"
         style={{
-          gridTemplateRows: filteredResults?.length
-            ? `repeat(${paginationValue},1fr)`
-            : "1fr",
+          gridTemplateRows:
+            filteredResults?.length || isLoading
+              ? `repeat(${paginationValue},1fr)`
+              : "1fr",
         }}
       >
-        {filteredResults?.length ? (
-          filteredResults
-            .filter(
-              (item, index) =>
-                index >= paginationValue * (page - 1) &&
-                index < paginationValue * page
-            )
-            .map((team) => (
-              <div
-                className="table-body-item table-item"
-                onClick={() => openTeamModal(team.id)}
-                key={team.id}
-              >
-                <div>{team.full_name}</div>
-                <div>{team.city}</div>
-                <div>{team.abbreviation}</div>
-                <div>{team.conference}</div>
-                <div>{team.division}</div>
-              </div>
-            ))
+        {filteredResults?.length || isLoading ? (
+          !isLoading ? (
+            filteredResults
+              .filter(
+                (item, index) =>
+                  index >= paginationValue * (page - 1) &&
+                  index < paginationValue * page
+              )
+              .map((team) => (
+                <div
+                  className={"table-body-item table-item"}
+                  onClick={() => openTeamModal(team.id)}
+                  key={team.id}
+                >
+                  <div>{team.full_name}</div>
+                  <div>{team.city}</div>
+                  <div>{team.abbreviation}</div>
+                  <div>{team.conference}</div>
+                  <div>{team.division}</div>
+                </div>
+              ))
+          ) : (
+            <>{skeletonComponent}</>
+          )
         ) : (
           <img
             alt="No Results Available Image"
